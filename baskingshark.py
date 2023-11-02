@@ -41,7 +41,7 @@ ll_OSGbin = 'OSG 1km'
 #"open-street-map", "carto-positron", "carto-darkmatter", "stamen-terrain", "stamen-toner" or "stamen-watercolor"  # noqa: E501
 px_map_tiles = 'carto-darkmatter'
 #px_map_tiles = 'stamen-terrain'
-mg = dict(l=20, r=20, b=20, t=100)
+mg = dict(l=0, r=20, b=20, t=10)
 
 dw = pd.read_csv(import_file, parse_dates=["Date"])
 
@@ -104,10 +104,10 @@ with tab3:
     ## Q. Where is the best location to see Basking sharks?
     ---
     """
-
+    st.subheader('Heat map of Basking Shark observations between 2003-2021')
     fig = px.density_mapbox(dw, lat='Latitude',lon='Longitude', z='Individual count', 
     radius=20, center=dict(lat=56.5, lon=-6.5), color_continuous_scale='blues_r', zoom=6, mapbox_style=px_map_tiles,
-    title = 'Heat map of ' + name + ' observations between 2003-2021', height=670)
+    height=670)
     fig.update_coloraxes(cmax=30, cmin=1, showscale=False)
     fig.update_layout(margin=mg)
     fig.update_traces(hovertemplate='%{z} Basking Sharks') 
