@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from OSGridConverter import grid2latlong
+import pydeck as pdk
 
 
 st.set_page_config(
@@ -37,8 +38,9 @@ import_file = 'data/Basking_Sharks.csv'
 name = "Basking Shark"
 # Which OS bins to use for the maps
 ll_OSGbin = 'OSG 1km'
-#"open-street-map", "carto-positron", "carto-darkmatter", "stamen-terrain", "stamen-toner" or "stamen-watercolor"
+#"open-street-map", "carto-positron", "carto-darkmatter", "stamen-terrain", "stamen-toner" or "stamen-watercolor"  # noqa: E501
 px_map_tiles = 'carto-darkmatter'
+#px_map_tiles = 'stamen-terrain'
 mg = dict(l=20, r=20, b=20, t=100)
 
 dw = pd.read_csv(import_file, parse_dates=["Date"])
@@ -127,13 +129,33 @@ with tab3:
     dw_plot_low = dw_plot.copy()
 
     # Plotly Bubble Map
-    cp = {'lat':56.5,'lon':-6.7}
-    plot_size = dw_plot['Total']
-    fig = px.scatter_mapbox(dw_plot_low, lat="Latitude", lon="Longitude", center=cp, color=plot_size, color_continuous_scale='blues_r',
-    opacity=0.8, zoom=8, size="Total", size_max=16, title=name+' hot spots 2003-2021', height=670,labels={"color": name+'s',"Total":name+'s',"Latitude":name+'s',"Longitude":name+'s'})
-    fig.update_coloraxes(colorbar_ticklabelposition='inside',colorbar_ticks='inside',cmax=20,cmin=1,showscale=False)
-    fig.update_layout(mapbox_style=px_map_tiles,margin=mg)
-    st.plotly_chart(fig, use_container_width=True)
+
+    st.subheader('Basking Shark hot spots 2003-2021')
+    view = pdk.data_utils.compute_view(dw_plot_low[["Longitude", "Latitude"]])
+    view.pitch = 70
+    view.bearing = 340
+    view.zoom = 8.5
+
+    st.pydeck_chart(pdk.Deck(
+    map_style=None,
+    initial_view_state = view,
+    tooltip={
+        'html': '<b>Basking Sharks:</b> {Total}',
+        'style': {'color': 'white'}
+    },
+    layers=[
+        pdk.Layer(
+           'ColumnLayer',
+           data=dw_plot_low,
+           get_position=["Longitude", "Latitude"],
+           radius=400,
+           get_elevation="Total",
+           elevation_scale=100,
+           get_fill_color=["Total * 10", "100", "100 + (Total * 20)", 200],
+           pickable=True,
+           autohighlight=True           
+        )
+    ],))
 
     """
     ---
