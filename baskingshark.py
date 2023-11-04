@@ -105,7 +105,7 @@ with tab3:
     ## Q. Where is the best location to see Basking sharks?
     ---
     """
-    st.subheader('Heat map of Basking Shark observations between 2003-2021')
+    st.subheader('Heat Map of Basking Shark Observations 2003-2021')
     fig = px.density_mapbox(dw, lat='Latitude',lon='Longitude', z='Individual count', 
     radius=20, center=dict(lat=56.5, lon=-6.5), color_continuous_scale='blues_r', zoom=6, mapbox_style=px_map_tiles,
     height=500)
@@ -131,7 +131,7 @@ with tab3:
 
     # Plotly Bubble Map
 
-    st.subheader('Basking Shark hot spots 2003-2021')
+    st.subheader('Basking Shark Hot Spots 2003-2021')
     view = pdk.data_utils.compute_view(dw_plot_low[["Longitude", "Latitude"]])
     view.pitch = 70
     view.bearing = 340
@@ -141,7 +141,7 @@ with tab3:
     map_style=None,
     initial_view_state = view,
     tooltip={
-        'html': '<b>Total spotted:</b> {Total}',
+        'html': '<b>Spotted:</b> {Total}',
         'style': {'color': 'white'}
     },
     layers=[
