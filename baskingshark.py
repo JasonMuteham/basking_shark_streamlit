@@ -141,7 +141,7 @@ with tab3:
     map_style=None,
     initial_view_state = view,
     tooltip={
-        'html': '<b>Spotted:</b> {Total}',
+        'html': '{Total} <b>Basking Sharks</b>',
         'style': {'color': 'white'}
     },
     layers=[
