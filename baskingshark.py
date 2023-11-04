@@ -25,6 +25,7 @@ st.set_page_config(
 Analysis by [Jason Muteham](https://github.com/JasonMuteham) 
 """
 # Create df group by OSGbin
+@st.cache_data
 def OSGbiner(OSGbin):
   df_tmp = dw.groupby([OSGbin,'Common name'])['Individual count'].sum()
   df_tmp = df_tmp.reset_index()
@@ -107,7 +108,7 @@ with tab3:
     st.subheader('Heat map of Basking Shark observations between 2003-2021')
     fig = px.density_mapbox(dw, lat='Latitude',lon='Longitude', z='Individual count', 
     radius=20, center=dict(lat=56.5, lon=-6.5), color_continuous_scale='blues_r', zoom=6, mapbox_style=px_map_tiles,
-    height=670)
+    height=500)
     fig.update_coloraxes(cmax=30, cmin=1, showscale=False)
     fig.update_layout(margin=mg)
     fig.update_traces(hovertemplate='%{z} Basking Sharks') 
